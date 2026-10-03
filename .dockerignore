@@ -15,6 +15,11 @@
 !examples/docker/
 !examples/docker/quickstart.py
 !examples/docker/request.json
+!examples/browser_agent_server/
+!examples/browser_agent_server/**
+examples/browser_agent_server/runtime.env
+examples/browser_agent_server/compose.env
+examples/browser_agent_server/browser-checkpoint/
 **/__pycache__/
 **/*.pyc
 **/.env

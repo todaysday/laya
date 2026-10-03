@@ -1,0 +1,21 @@
+# Completion review: Laya browser agent example
+
+## Implementation
+
+- The example runs the pinned browser checkpoint as a lazy per-profile worker under the existing authenticated SystemOne HTTP service. The worker has private IPC, no HTTP listener, and no API key; each idle worker exits after 600 seconds without an in-flight request.
+- The browser checkpoint source is pinned to `cklxx/laya-browser@adf912be85ff9221ee171551778456b133c1af75/v10s`; the Laya source is pinned to `fa9a2a7070b1789912a49ae24603bbfb1a78b001`.
+- The runtime files in this example are exact copies of the reviewed deployment source. Their hashes were compared with the runtime-owner handoff.
+- Code Simplifier was applied to the source implementation before this publication; the public copy remains byte-identical to the reviewed source, so no fork-only runtime edits were made.
+- Compose mounts checkpoint files read-only and receives the API key through a Docker secret file. No checkpoint weights are included.
+
+## Verification evidence
+
+The deployment owner reports pinned-image, network-disabled contract results of worker 10/10, router/readiness 15/15, and v3 adapter 4/4 after Code Simplifier. Serial production smoke returned choices for all three profiles, and invalid bearer authentication returned HTTP 401. All three workers exited at their natural 600-second idle deadlines while the HTTP service stayed active. Cgroup current moved from 6,547,693,568 bytes with all profiles loaded to 182,960,128 bytes after expiry; parent RSS returned to its 258,809,856-byte startup baseline. One post-expiry browser request started a fresh worker in 9.607 seconds and returned all 51 candidates without truncation; total API time was 12.025 seconds.
+
+The ten-case Books-to-Scrape prompt comparison and 3/3 Camofox exact-ref regression are documented in `../../docs/browser-agent-playbook.md`. These are task-specific observations, not general browser-agent accuracy guarantees.
+
+`docker compose config` passed for the example configuration. A full Docker image build was not run for this publication.
+
+## Remaining work
+
+See [`openspec/TODO.md`](../../openspec/TODO.md) for the coordinate adapter, a separate `Childrens` label evaluation, and OmniRoute integration follow-ups.

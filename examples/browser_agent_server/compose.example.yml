@@ -1,0 +1,22 @@
+services:
+  laya-browser-agent:
+    build:
+      context: ../..
+      dockerfile: Dockerfile
+    image: laya-browser-agent:local
+    command: ["python", "/opt/laya/examples/browser_agent_server/unified_server.py"]
+    env_file:
+      - ./runtime.env
+    environment:
+      LAYA_API_KEY_FILE: /run/secrets/laya_api_key
+    ports:
+      - "127.0.0.1:8100:8000"
+    volumes:
+      - "${BROWSER_CHECKPOINT_DIR:?set BROWSER_CHECKPOINT_DIR}:/opt/laya-browser-checkpoint:ro"
+    secrets:
+      - laya_api_key
+    restart: unless-stopped
+
+secrets:
+  laya_api_key:
+    file: ${LAYA_API_KEY_SOURCE_FILE:?set LAYA_API_KEY_SOURCE_FILE}

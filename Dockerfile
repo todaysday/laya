@@ -65,6 +65,7 @@ RUN groupadd --gid 10001 laya \
 COPY --from=build /opt/venv /opt/venv
 COPY LICENSE /usr/share/doc/laya/LICENSE
 COPY examples/docker/ /opt/laya/examples/
+COPY examples/browser_agent_server/ /opt/laya/examples/browser_agent_server/
 COPY docker/entrypoint.py /opt/laya/entrypoint.py
 COPY docker/prefetch_modelscope.py /opt/laya/prefetch_modelscope.py
 

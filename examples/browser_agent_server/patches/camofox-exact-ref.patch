@@ -1,0 +1,5 @@
+--- a/dist/src/services/tab.js
++++ b/dist/src/services/tab.js
+@@ -967,1 +967,1 @@
+-    const locator = page.getByRole(toLocatorRole(role), name ? { name } : undefined);
++    const locator = page.getByRole(toLocatorRole(role), { name, exact: true });
