@@ -1,21 +1,41 @@
-# Completion review: Laya browser agent example
+# Laya browser decision completion review
 
-## Implementation
+## Implementation and validation
 
-- The example runs the pinned browser checkpoint as a lazy per-profile worker under the existing authenticated SystemOne HTTP service. The worker has private IPC, no HTTP listener, and no API key; each idle worker exits after 600 seconds without an in-flight request.
-- The browser checkpoint source is pinned to `cklxx/laya-browser@adf912be85ff9221ee171551778456b133c1af75/v10s`; the Laya source is pinned to `fa9a2a7070b1789912a49ae24603bbfb1a78b001`.
-- The runtime files in this example are exact copies of the reviewed deployment source. Their hashes were compared with the runtime-owner handoff.
-- Code Simplifier was applied to the source implementation before this publication; the public copy remains byte-identical to the reviewed source, so no fork-only runtime edits were made.
-- Compose mounts checkpoint files read-only and receives the API key through a Docker secret file. No checkpoint weights are included.
+- The change is archived in standard OpenSpec layout with selected design and pseudocode, a scoped `laya-service` delta, completed tasks, and a merged living spec. Strict validation of `openspec/specs/laya-service/spec.md` passed.
+- This publication-shape correction changes documentation only; reviewed runtime source is unchanged.
+- The public API remains the existing authenticated SystemOne endpoint, with
+  English, multilingual, and browser v10s profiles.
+- The browser profile pins Laya source
+  `fa9a2a7070b1789912a49ae24603bbfb1a78b001` and checkpoint
+  `cklxx/laya-browser@adf912be85ff9221ee171551778456b133c1af75/v10s/`.
+- After Code Simplifier and a post-pass rerun, network-disabled pinned-image
+  checks passed: worker contracts 10/10, router/readiness 15/15, and browser
+  format-v3 adapter 4/4.
+- A fresh Camofox exact-ref route regression passed 3/3 for Fiction,
+  Historical Fiction, and an empty accessible name. Historical model trials
+  remain unchanged.
 
-## Verification evidence
+## Measured outcomes
 
-The deployment owner reports pinned-image, network-disabled contract results of worker 10/10, router/readiness 15/15, and v3 adapter 4/4 after Code Simplifier. Serial production smoke returned choices for all three profiles, and invalid bearer authentication returned HTTP 401. All three workers exited at their natural 600-second idle deadlines while the HTTP service stayed active. Cgroup current moved from 6,547,693,568 bytes with all profiles loaded to 182,960,128 bytes after expiry; parent RSS returned to its 258,809,856-byte startup baseline. One post-expiry browser request started a fresh worker in 9.607 seconds and returned all 51 candidates without truncation; total API time was 12.025 seconds.
+- On ten frozen Books to Scrape category goals, base Laya selected the target
+  label in 1/10 and achieved 0/10 exact click-plus-URL outcomes. Browser v10s
+  selected the target label in 9/10 and achieved 8/10 exact outcomes. This is
+  a single site-specific set, not general browser accuracy.
+- Natural 600-second idle expiry terminated all three model workers without
+  interrupting requests; the existing API service remained active. Cgroup
+  current was 177,356,800 B before model loads, 6,547,693,568 B with all three
+  workers loaded, and 182,960,128 B after expiry. Parent RSS returned to its
+  258,809,856 B pre-load baseline.
+- A post-expiry browser reload preserved the complete 51-choice inventory,
+  returned an offered choice without truncation at native 1024/768 context,
+  and used 9.607 s to load the worker and 12.025 s end-to-end. This one reload
+  is a smoke measurement, not a latency distribution or navigation-accuracy
+  sample.
 
-The ten-case Books-to-Scrape prompt comparison and 3/3 Camofox exact-ref regression are documented in `../../docs/browser-agent-playbook.md`. These are task-specific observations, not general browser-agent accuracy guarantees.
+## Open work
 
-`docker compose config` passed for the example configuration. A full Docker image build was not run for this publication.
-
-## Remaining work
-
-See [`openspec/TODO.md`](../../openspec/TODO.md) for the coordinate adapter, a separate `Childrens` label evaluation, and OmniRoute integration follow-ups.
+The scoped OpenSpec TODO retains Camofox-to-BrowserUse coordinate integration,
+the `Childrens` label mismatch, and OmniRoute routing. No credentials, private
+hosts, secret paths, or local environment values are included in this public
+handoff.

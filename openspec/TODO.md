@@ -1,5 +1,11 @@
 # Laya browser-agent follow-ups
 
+## Completed
+
+- [x] Publish the selected worker design and pseudocode, archived `laya-service` spec delta, and merged living spec in standard OpenSpec layout; strict living-spec validation passes.
+
+## Remaining follow-ups
+
 - Natural expiry and memory behavior are verified for the deployed
   one-child-process-per-profile design. Each worker exited after 600 idle
   seconds without an in-flight request; the existing API service stayed up,
